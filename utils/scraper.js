@@ -1,35 +1,42 @@
-//to implement the scraping logic.
-const axios = require("axios");
-const cheerio = require("cheerio");
-const scrapingConfig = require("../config/scrapingConfig");
+const puppeteer = require('puppeteer');
+const data = require('../config/scrapingConfig');
+
+(async () => {
+    const browser = await puppeteer.launch({ headless: true }); 
+    const page = await browser.newPage();
 
 
+    await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36');
+    await page.setExtraHTTPHeaders({
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Referer': 'https://www.google.com',
+        'DNT': '1',
+        'Connection': 'keep-alive'
+    });
 
-const scrapePrices = async () => {
-    const prices = [];
+    const scrapeSite = async (site) => {
+        try {
+            await page.goto(site.url, { waitUntil: 'networkidle2' });
 
-    for(const site of scrapingConfig.sites){
-        try{
-            const response = await axios.get(setImmediate.url);
-            const $ = cheerio.load(response.data);
-
-            $(site.selectors.products).each((index, element)=>{
-                const product = $(element).text().trim();
-                const price = $(element).siblings(site.selectors.price).text().trim()
-                const category = $(element).siblings(site.selectors.category).text().trim();
-
-                prices.push({
-                    site: site.name,
-                    product,
-                    price,
-                    category,
+            const products = await page.evaluate((selectors) => {
+                const productElements = document.querySelectorAll(selectors.product);
+                return Array.from(productElements).map(product => {
+                    const name = product.querySelector(selectors.name)?.innerText.trim() || 'N/A';
+                    const price = product.querySelector(selectors.price)?.innerText.trim() || 'N/A';
+					const category = product.querySelector(selectors.category.sel)?.getAttribute(selectors.category.att) || 'N/A';
+                    return { name, price, category };
                 });
-            });
-        }catch(error){
-            console.error(`Error scraping ${site.name}:`, error.message)
+            }, site.selectors);
+
+            console.log(`Scraped ${site.url}:`, products);
+            return products;
+        } catch (error) {
+            console.error(`Error scraping ${site.url}:`, error.message);
         }
     };
-    return prices;
-};
 
-module.exports = {scrapePrices}
+    await Promise.all(data.sites.map(scrapeSite));
+
+    await browser.close();
+})();

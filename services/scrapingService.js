@@ -1,12 +1,49 @@
-//to use the scraper.
-const { scrapePrices } = require("../utils/scraper");
+const puppeteer = require('puppeteer');
+const data = require('../config/scrapingConfig');
 
+const scrapePrices = async () => {
+  const browser = await puppeteer.launch({ headless: true });
+  const page = await browser.newPage();
 
-const scrapingService = {
-    getPrices: async () => {
-      const prices = await scrapePrices();
-      return prices;
-    },
+  await page.setUserAgent(
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36'
+  );
+  await page.setExtraHTTPHeaders({
+    Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+    'Accept-Language': 'en-US,en;q=0.9',
+    Referer: 'https://www.google.com',
+    DNT: '1',
+    Connection: 'keep-alive',
+  });
+
+  const scrapeSite = async (site) => {
+    try {
+      await page.goto(site.url, { waitUntil: 'networkidle2' });
+
+      const products = await page.evaluate((selectors, siteName) => {
+        const productElements = document.querySelectorAll(selectors.product);
+        return Array.from(productElements).map((product) => {
+          const name = product.querySelector(selectors.name)?.innerText.trim() || 'N/A';
+          const price = product.querySelector(selectors.price)?.innerText.trim() || 'N/A';
+          const category = selectors.category
+            ? product.querySelector(selectors.category.sel)?.getAttribute(selectors.category.att) || 'N/A'
+            : 'N/A';
+          return { name, price, category, site: siteName };
+        });
+      }, site.selectors, site.name);
+
+      console.log(`Scraped ${site.url}:`, products);
+      return products;
+    } catch (error) {
+      console.error(`Error scraping ${site.url}:`, error.message);
+      return [];
+    }
   };
-  
-  module.exports = scrapingService;
+
+  const results = await Promise.all(data.sites.map(scrapeSite));
+  await browser.close();
+
+  return results.flat();
+};
+
+module.exports = { scrapePrices };

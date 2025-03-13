@@ -1,34 +1,53 @@
-<!-- view page -->
- <!-- views/prices.ejs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Prix des produits</title>
-  <link rel="stylesheet" href="/styles.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+    th {
+      background-color: #f4f4f4;
+    }
+  </style>
 </head>
 <body>
-  <h1>Prix des produits au Maroc</h1>
-  <table>
-    <thead>
-      <tr>
-        <th>Site</th>
-        <th>Produit</th>
-        <th>Prix</th>
-        <th>Catégorie</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% prices.forEach(price => { %>
+  <h1>Prix des produits</h1>
+  <% if (prices && prices.length > 0) { %>
+    <table>
+      <thead>
         <tr>
-          <td><%= price.site %></td>
-          <td><%= price.product %></td>
-          <td><%= price.price %></td>
-          <td><%= price.category %></td>
+          <th>Site</th>
+          <th>Produit</th>
+          <th>Prix</th>
+          <th>Catégorie</th>
         </tr>
-      <% }) %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <% prices.forEach(product => { %>
+          <tr>
+            <td><%= product.site %></td>
+            <td><%= product.name %></td>
+            <td><%= product.price %></td>
+            <td><%= product.category %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } else { %>
+    <p>Aucun produit trouvé.</p>
+  <% } %>
 </body>
 </html>

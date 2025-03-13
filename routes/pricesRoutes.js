@@ -1,9 +1,7 @@
-//to define  routes
-
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const priceController = require("../controllers/priceController");
+const priceController = require('../controllers/priceController');
 
-router.get("/prices", priceController.getPrices);
+router.get('/', priceController.getPrices);
 
 module.exports = router;
