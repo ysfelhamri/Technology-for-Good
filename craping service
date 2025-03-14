@@ -1,0 +1,47 @@
+[33mcommit 8e3d077e029a0a7604d0a31b94138c21517ba1f1[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdev[m[33m)[m
+Author: Ayoub <Fanaoui.25@gmail.com>
+Date:   Thu Mar 13 22:06:19 2025 +0100
+
+    Add scraping service
+
+[33mcommit 7007575e8aab28ab1527c1348ec162dd58fe2fce[m
+Author: Ayoub <Fanaoui.25@gmail.com>
+Date:   Thu Mar 13 22:04:09 2025 +0100
+
+    Add web scraper utility
+
+[33mcommit 645216c64cfd88fca72c427d715df211a3a4f18c[m
+Author: Ayoub <Fanaoui.25@gmail.com>
+Date:   Thu Mar 13 20:58:11 2025 +0100
+
+    Add scraping configuration file
+
+[33mcommit 007e0080f75cd9004063eaff33152fadbbfb7d59[m[33m ([m[1;31morigin/main[m[33m, [m[1;32mmain[m[33m)[m
+Author: Ayoub <Fanaoui.25@gmail.com>
+Date:   Thu Mar 13 19:40:26 2025 +0100
+
+    Set up project structure with MVC architecture
+
+[33mcommit 0edadcbc20d3e986c3638c72304b20e2eb051ed8[m
+Author: Ayoub <Fanaoui.25@gmail.com>
+Date:   Thu Mar 13 01:09:42 2025 +0100
+
+    Set up project structure with MVC architecture
+
+[33mcommit 7de0a6e99c7052a9fb451e67350686016989496c[m
+Author: Ayoub <Fanaoui.25@gmail.com>
+Date:   Wed Mar 12 23:41:09 2025 +0100
+
+    Add npm scripts for start and dev
+
+[33mcommit bf06f37c6d09e81b8047f2c0d6636a3ab13e4063[m
+Author: Ayoub <Fanaoui.25@gmail.com>
+Date:   Wed Mar 12 23:39:07 2025 +0100
+
+    install nodemon
+
+[33mcommit 8f7c0d1f0229099341cc5502d310b207bb1c8963[m
+Author: Ayoub <Fanaoui.25@gmail.com>
+Date:   Wed Mar 12 23:33:18 2025 +0100
+
+    Initialize project and install Express and Nodemon
